@@ -1,0 +1,21 @@
+header {
+  background-color: #006a4e;
+  color: aliceblue;
+}
+
+body {
+  background-color: #000;
+}
+
+h1 {
+  color: aliceblue;
+  font-size: 50px;
+}
+
+p {
+  color: #777;
+}
+
+img {
+  align-items: center;
+}
