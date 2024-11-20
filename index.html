@@ -3,16 +3,36 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
-    <title>Document</title>
+    <link rel="stylesheet" href="uniform.css" />
+    <title>AsciiDIVE</title>
   </head>
-  <header>About</header>
   <body>
-    <h1>ASCII ART</h1>
-    <p>A dive into the world of ascii arts</p>
-    <div class="picture">
-      <img src="milli.jpeg" alt="picture of a girl in ascii art" />
-      <img src="milli2.jpeg" alt="altyes" />
+    <div class="section">
+      <div class="video-container">
+        <div class="color-overlay"></div>
+        <video autoplay loop muted>
+          <source src="vid/vid.mp4" type="video/mp4" />
+        </video>
+      </div>
+
+      <div class="form1">
+        <form oninput="updateCard()">
+          <label for="backgroundColor">Background Color:</label>
+          <input type="color" id="backgroundColor" value="#f8f8f8" />
+
+          <label for="borderColor">Border Color:</label>
+          <input type="color" id="borderColor" value="#333" />
+
+          <label for="customText">Custom Text:</label>
+          <input type="text" id="customText" placeholder="Enter text" />
+
+          <!-- Card to be customized -->
+          <div id="customCard">
+            <p id="cardText">Card Content</p>
+          </div>
+        </form>
+      </div>
     </div>
   </body>
+  <script src="script.js"></script>
 </html>
