@@ -12,7 +12,7 @@ func HandleFunc(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 
-	http.HandleFunc("/ascii", HandleFunc)
+	http.HandleFunc("/", HandleFunc)
 	 http.ListenAndServe(":8080", nil)
 }
 
