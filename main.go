@@ -7,11 +7,6 @@ import (
 	"net/http"
 )
 
-
-
-
-
-
 type TemplateData struct {
 	ASCIIART string
 	Error    string
@@ -77,6 +72,14 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func GenerateASCIIArt(text, template string) (string, error) {
+
+	if template != "standard" && template != "shadow" && template != "thinkertoy" {
+		return "", fmt.Errorf("invalid template selected")
+	}
+
+	return fmt.Sprintf("Generated ASCII art for '%s' using '%s' template", text, template), nil
+}
 
 func main() {
 	http.HandleFunc("/", handler)
