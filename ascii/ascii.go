@@ -38,8 +38,12 @@ func RenderASCII(asciiMap map[rune][]string, text string) string {
 			for _, char := range line {
 				asciiLines, exists := asciiMap[char]
 				if !exists {
+					if !exists {
+						fmt.Printf("Character not found: '%c'\n", char)
+					}
+
 					result.WriteString(fmt.Sprintf("Error: '%c' not found\n", char))
-					return result.String()
+					continue
 				}
 				result.WriteString(asciiLines[i])
 			}
@@ -51,15 +55,13 @@ func RenderASCII(asciiMap map[rune][]string, text string) string {
 
 // LoadTemplate and other helper functions remain the same
 func LoadTemplate(filePath string) map[rune][]string {
-	// Adjust the path to load templates from the 'ascii/templates' folder
-	file, err := os.Open("ascii/templates/" + filePath) // Path adjusted
+	file, err := os.Open(filePath)
 	if err != nil {
 		return nil
 	}
 	defer file.Close()
 
 	asciiMap := make(map[rune][]string)
-
 	scanner := bufio.NewScanner(file)
 
 	var character rune = ' '
@@ -70,13 +72,12 @@ func LoadTemplate(filePath string) map[rune][]string {
 			if len(lines) > 0 {
 				asciiMap[character] = lines
 				character++
-				lines = []string{}
+				lines = nil
 			}
 		} else {
 			lines = append(lines, line)
 		}
 	}
-
 	return asciiMap
 }
 

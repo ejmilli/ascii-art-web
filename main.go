@@ -7,62 +7,83 @@ import (
 	"net/http"
 )
 
-var tpl *template.Template
+
+
+
+
 
 type TemplateData struct {
 	ASCIIART string
+	Error    string
 }
 
+var tpl *template.Template
 
 func init() {
-	var err error
 
-	tpl, err = template.ParseGlob("templates/*.html")
-	if err != nil {
-			fmt.Println("Error loading templates:", err)
-			return
-	}
-	fmt.Println("Templates loaded successfully.")
+	tpl = template.Must(template.ParseGlob("templates/*.html"))
 }
 
-
-
 func handler(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "GET" {
-		// Render the template with an empty result
-		err := tpl.ExecuteTemplate(w, "index.html", TemplateData{})
-		if err != nil {
-			http.Error(w, "Error rendering template", http.StatusInternalServerError)
-		}
+	if r.URL.Path != "/" {
+		http.Error(w, "404 PAGE NOT FOUND", http.StatusNotFound)
 		return
 	}
 
-	if r.Method == "POST" {
-		// Parse the form data
-		err := r.ParseForm()
+	switch r.Method {
+	case "GET":
+		// Serve the initial form
+		err := tpl.ExecuteTemplate(w, "index.html", nil)
 		if err != nil {
-			http.Error(w, "Failed to parse form", http.StatusInternalServerError)
+			http.Error(w, "Error rendering template", http.StatusInternalServerError)
+		}
+
+	case "POST":
+		// Parse form data
+		if err := r.ParseForm(); err != nil {
+			http.Error(w, "Error parsing form data", http.StatusInternalServerError)
 			return
 		}
 
-		// Get text and template from the form
+		// Get form values
 		text := r.FormValue("text")
-		templateName := r.FormValue("template")
+		template := r.FormValue("template")
 
-		// Generate ASCII art using your ASCII package
-		asciiArt, err := ascii.GenerateASCIIArt(text, templateName) // Replace with your actual function
+		// Validate input
+		if text == "" || template == "" {
+			http.Error(w, "Text and Template fields are required", http.StatusBadRequest)
+			return
+		}
+
+		// Generate ASCII Art (mock function, replace with actual implementation)
+		asciiArt, err := ascii.GenerateASCIIArt(text, template)
 		if err != nil {
 			http.Error(w, "Error generating ASCII art: "+err.Error(), http.StatusInternalServerError)
 			return
 		}
 
-		// Pass the ASCII art back to the template
+		// Pass ASCII Art to the template
 		data := TemplateData{ASCIIART: asciiArt}
 		err = tpl.ExecuteTemplate(w, "index.html", data)
 		if err != nil {
 			http.Error(w, "Error rendering template", http.StatusInternalServerError)
 		}
+		if err != nil {
+			fmt.Println("Error rendering template:", err)
+		}
+
+	default:
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
+}
+
+func GenerateASCIIArt(text, template string) (string, error) {
+
+	if template != "standard" && template != "shadow" && template != "thinkertoy" {
+		return "", fmt.Errorf("invalid template selected")
+	}
+
+	return fmt.Sprintf("Generated ASCII art for '%s' using '%s' template", text, template), nil
 }
 
 func main() {
