@@ -7,59 +7,49 @@ import (
 	"strings"
 )
 
-func main() {
-	if len(os.Args) != 3 {
-		fmt.Println("Please provide a valid text argument. Usage: go run. <text> <template>")
-		return
-	}
-
-	text := os.Args[1]
-	template := os.Args[2]
-
+// GenerateASCIIArt generates ASCII art for the given text and template.
+func GenerateASCIIArt(text, template string) (string, error) {
 	templates := map[string]string{
-		"standard":   "standard.txt",
-		"shadow":     "shadow.txt",
-		"thinkertoy": "thinkertoy.txt",
+		"standard":   "templates/standard.txt",
+		"shadow":     "templates/shadow.txt",
+		"thinkertoy": "templates/thinkertoy.txt",
 	}
+
 	templatePath, exists := templates[template]
 	if !exists {
-		fmt.Println("Template not found.")
-		return
+		return "", fmt.Errorf("template not found: %s", template)
 	}
 
 	asciiMap := LoadTemplate(templatePath)
+	if asciiMap == nil {
+		return "", fmt.Errorf("failed to load template: %s", templatePath)
+	}
 
-	PrintASCII(asciiMap, text)
+	return RenderASCII(asciiMap, text), nil
 }
 
-func PrintASCII(asciiMap map[rune][]string, text string) {
-
+// RenderASCII generates the ASCII art string.
+func RenderASCII(asciiMap map[rune][]string, text string) string {
+	var result strings.Builder
 	lines := SplitTextByLines(ParseEscapeSequences(text))
 
-	chars := 0
 	for _, line := range lines {
-		chars += len(line)
-	}
-	if chars == 0 {
-		lines = lines[:len(lines)-1]
-	}
-
-	for _, line := range lines {
-
 		for i := 0; i < 8; i++ {
 			for _, char := range line {
 				asciiLines, exists := asciiMap[char]
 				if !exists {
-					fmt.Printf("Error: Character '%c' not found in ASCII map\n", char)
-					return
+					result.WriteString(fmt.Sprintf("Error: '%c' not found\n", char))
+					return result.String()
 				}
-				fmt.Print(asciiLines[i])
+				result.WriteString(asciiLines[i])
 			}
-			fmt.Println()
+			result.WriteString("\n")
 		}
 	}
+	return result.String()
 }
 
+// LoadTemplate and other helper functions remain the same
 func LoadTemplate(filePath string) map[rune][]string {
 	file, err := os.Open(filePath)
 	if err != nil {
@@ -68,11 +58,9 @@ func LoadTemplate(filePath string) map[rune][]string {
 	defer file.Close()
 
 	asciiMap := make(map[rune][]string)
-
 	scanner := bufio.NewScanner(file)
 
 	var character rune = ' '
-
 	var lines []string
 	for scanner.Scan() {
 		line := scanner.Text()
@@ -80,14 +68,12 @@ func LoadTemplate(filePath string) map[rune][]string {
 			if len(lines) > 0 {
 				asciiMap[character] = lines
 				character++
-				lines = []string{}
+				lines = nil
 			}
 		} else {
-
 			lines = append(lines, line)
 		}
 	}
-
 	return asciiMap
 }
 
