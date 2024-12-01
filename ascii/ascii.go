@@ -10,9 +10,9 @@ import (
 // GenerateASCIIArt generates ASCII art for the given text and template.
 func GenerateASCIIArt(text, template string) (string, error) {
 	templates := map[string]string{
-		"standard":   "templates/standard.txt",
-		"shadow":     "templates/shadow.txt",
-		"thinkertoy": "templates/thinkertoy.txt",
+		"standard":   "./ascii/txt/standard.txt",
+		"shadow":     "./ascii/txt/shadow.txt",
+		"thinkertoy": "./ascii/txt/thinkertoy.txt",
 	}
 
 	templatePath, exists := templates[template]
@@ -51,13 +51,15 @@ func RenderASCII(asciiMap map[rune][]string, text string) string {
 
 // LoadTemplate and other helper functions remain the same
 func LoadTemplate(filePath string) map[rune][]string {
-	file, err := os.Open(filePath)
+	// Adjust the path to load templates from the 'ascii/templates' folder
+	file, err := os.Open("ascii/templates/" + filePath) // Path adjusted
 	if err != nil {
 		return nil
 	}
 	defer file.Close()
 
 	asciiMap := make(map[rune][]string)
+
 	scanner := bufio.NewScanner(file)
 
 	var character rune = ' '
@@ -68,12 +70,13 @@ func LoadTemplate(filePath string) map[rune][]string {
 			if len(lines) > 0 {
 				asciiMap[character] = lines
 				character++
-				lines = nil
+				lines = []string{}
 			}
 		} else {
 			lines = append(lines, line)
 		}
 	}
+
 	return asciiMap
 }
 
