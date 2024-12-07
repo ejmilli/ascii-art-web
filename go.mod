@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-module ascii-art-web.com
-
-go 1.22.2
-=======
 module ascrii-art-web
 
 go 1.23.1
