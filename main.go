@@ -15,6 +15,7 @@ type TemplateData struct {
 var tpl *template.Template
 
 func init() {
+
 	tpl = template.Must(template.ParseGlob("templates/*.html"))
 }
 
@@ -49,18 +50,21 @@ func handler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		// Generate ASCII Art
-		asciiArt, statusCode := ascii.GenerateASCIIArt(text, template)
-		if statusCode != http.StatusOK {
-			http.Error(w, asciiArt, statusCode) // Send error response with proper status code
+		// Generate ASCII Art (mock function, replace with actual implementation)
+		asciiArt, err := ascii.GenerateASCIIArt(text, template)
+		if err != nil {
+			http.Error(w, "Error generating ASCII art: "+err.Error(), http.StatusInternalServerError)
 			return
 		}
 
 		// Pass ASCII Art to the template
 		data := TemplateData{ASCIIART: asciiArt}
-		err := tpl.ExecuteTemplate(w, "index.html", data)
+		err = tpl.ExecuteTemplate(w, "index.html", data)
 		if err != nil {
 			http.Error(w, "Error rendering template", http.StatusInternalServerError)
+		}
+		if err != nil {
+			fmt.Println("Error rendering template:", err)
 		}
 
 	default:
