@@ -18,9 +18,18 @@ func init() {
 	tpl = template.Must(template.ParseGlob("templates/*.html"))
 }
 
+
+func renderError(w http.ResponseWriter, status int, errorTemplate string) {
+	w.WriteHeader(status)
+	err := tpl.ExecuteTemplate(w, errorTemplate, nil)
+	if err != nil {
+		http.Error(w, http.StatusText(status), status)
+	}
+}
+
 func handler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
-		http.Error(w, "404 PAGE NOT FOUND", http.StatusNotFound)
+		renderError(w, http.StatusNotFound , "404.html")
 		return
 	}
 
@@ -29,13 +38,13 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		// Serve the initial form
 		err := tpl.ExecuteTemplate(w, "index.html", nil)
 		if err != nil {
-			http.Error(w, "Error rendering template", http.StatusInternalServerError)
+		renderError(w, http.StatusInternalServerError, "500.html")
 		}
 
 	case "POST":
 		// Parse form data
 		if err := r.ParseForm(); err != nil {
-			http.Error(w, "Error parsing form data", http.StatusInternalServerError)
+			renderError(w, http.StatusBadRequest, "400.html")
 			return
 		}
 
@@ -45,7 +54,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 		// Validate input
 		if text == "" || template == "" {
-			http.Error(w, "Text and Template fields are required", http.StatusBadRequest)
+			renderError(w, http.StatusBadRequest, "404.html")
 			return
 		}
 
@@ -73,3 +82,6 @@ func main() {
 	fmt.Println("Server running at http://localhost:8080")
 	http.ListenAndServe(":8080", nil)
 }
+
+
+
