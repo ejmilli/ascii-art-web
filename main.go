@@ -61,15 +61,22 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		// Generate ASCII Art
 		asciiArt, statusCode := ascii.GenerateASCIIArt(text, template)
 		if statusCode != http.StatusOK {
-			http.Error(w, asciiArt, statusCode) // Send error response with proper status code
+			// Use renderError to display custom error pages
+			switch statusCode {
+			case http.StatusBadRequest:
+				renderError(w, http.StatusBadRequest, "400.html")
+			case http.StatusInternalServerError:
+				renderError(w, http.StatusInternalServerError, "500.html")
+			default:
+				http.Error(w, asciiArt, statusCode) // Fallback for unexpected errors
+			}
 			return
 		}
-
 		// Pass ASCII Art to the template
 		data := TemplateData{ASCIIART: asciiArt}
 		err := tpl.ExecuteTemplate(w, "index.html", data)
 		if err != nil {
-			http.Error(w, "Error rendering template", http.StatusInternalServerError)
+			renderError(w, http.StatusInternalServerError, "500.html")
 		}
 
 	default:

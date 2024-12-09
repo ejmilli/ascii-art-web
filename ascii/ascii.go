@@ -24,7 +24,7 @@ func GenerateASCIIArt(text, template string) (string, int) {
 	}
 
 	templates := map[string]string{
-		"standard":   "./ascii/txt/standard.txt",
+		"standard":   ".../ascii/txt/standard.txt",
 		"shadow":     "./ascii/txt/shadow.txt",
 		"thinkertoy": "./ascii/txt/thinkertoy.txt",
 	}
