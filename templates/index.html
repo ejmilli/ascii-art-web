@@ -3,18 +3,24 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-   
+
     <title>Ascii Art Generator</title>
   </head>
 
   <body>
-  
-      <h1>Ascii Art Generator</h1>
+    <h1>Ascii Art Generator</h1>
 
     <form action="/" method="POST">
-    <p>text</p>
-     
-    <textarea id="text" name="text" rows="5" cols="40" placeholder="Enter your text here..." required></textarea>
+      <p style="font-family: Arial, sans-serif">Enter Your Text</p>
+
+      <textarea
+        id="text"
+        name="text"
+        rows="5"
+        cols="40"
+        placeholder="Enter your text here..."
+        required
+      ></textarea>
 
       <br /><br />
       <label for="Choose a Template"></label>
@@ -41,10 +47,6 @@
       <button type="submit">submit</button>
 
       <h2>Result:</h2>
-
-      {{if .Error}}
-      <p style="color: red">Error: {{.Error}}</p>
-      {{end}}
       <pre>{{.ASCIIART}}</pre>
     </form>
   </body>
