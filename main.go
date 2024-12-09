@@ -29,7 +29,7 @@ func renderError(w http.ResponseWriter, status int, errorTemplate string) {
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
-		renderError(w, http.StatusNotFound , "404.html")
+		renderError(w, http.StatusNotFound, "404.html")
 		return
 	}
 
@@ -38,13 +38,13 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		// Serve the initial form
 		err := tpl.ExecuteTemplate(w, "index.html", nil)
 		if err != nil {
-		renderError(w, http.StatusInternalServerError, "500.html")
+			renderError(w, http.StatusInternalServerError, "500.html")
 		}
 
 	case "POST":
 		// Parse form data
 		if err := r.ParseForm(); err != nil {
-			renderError(w, http.StatusBadRequest, "400.html")
+			renderError(w, http.StatusBadRequest, "400.html") // Handle form parsing errors
 			return
 		}
 
@@ -54,24 +54,26 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 		// Validate input
 		if text == "" || template == "" {
-			renderError(w, http.StatusBadRequest, "404.html")
+			// Call renderError for 400.html on validation failure
+			renderError(w, http.StatusBadRequest, "400.html")
 			return
 		}
 
 		// Generate ASCII Art
 		asciiArt, statusCode := ascii.GenerateASCIIArt(text, template)
 		if statusCode != http.StatusOK {
-			// Use renderError to display custom error pages
+			// Handle ASCII art generation errors
 			switch statusCode {
 			case http.StatusBadRequest:
 				renderError(w, http.StatusBadRequest, "400.html")
 			case http.StatusInternalServerError:
 				renderError(w, http.StatusInternalServerError, "500.html")
 			default:
-				http.Error(w, asciiArt, statusCode) // Fallback for unexpected errors
+				http.Error(w, "Unexpected error", statusCode)
 			}
 			return
 		}
+
 		// Pass ASCII Art to the template
 		data := TemplateData{ASCIIART: asciiArt}
 		err := tpl.ExecuteTemplate(w, "index.html", data)
@@ -83,6 +85,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
 }
+
 
 func main() {
 	http.HandleFunc("/", handler)

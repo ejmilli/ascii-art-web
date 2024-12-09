@@ -3,6 +3,7 @@ package ascii
 import (
 	"bufio"
 	"fmt"
+	"net/http"
 	"os"
 	"strings"
 )
@@ -17,14 +18,15 @@ func GenerateASCIIArt(text, template string) (string, int) {
 	text = CleanInput(text)
 	// Validate input for unprintable ASCII characters
 	for _, char := range text {
-		if char < 32 && char > 126 {
-			return fmt.Sprintf("Error: Unprintable character '%c' found", char), 400
+		if char < 32 || char > 126 {
+			if char != '\n' && char != ' ' { // Allow spaces and newlines
+				return "", http.StatusBadRequest
+			}
 		}
-
 	}
 
 	templates := map[string]string{
-		"standard":   ".../ascii/txt/standard.txt",
+		"standard":   "./ascii/txt/standard.txt",
 		"shadow":     "./ascii/txt/shadow.txt",
 		"thinkertoy": "./ascii/txt/thinkertoy.txt",
 	}
