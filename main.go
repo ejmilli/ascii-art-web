@@ -14,7 +14,6 @@ type TemplateData struct {
 
 var tpl *template.Template
 
-
 // renderError handles error page rendering
 func renderError(w http.ResponseWriter, status int, errorTemplate string) {
 	// Set the response status code and render the appropriate error template
@@ -80,11 +79,10 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 
-  	tpl = template.Must(template.ParseGlob("templates/*.html"))
-	
-		http.HandleFunc("/", handler)
-		fmt.Println("Server running at http://localhost:8080")
-		http.ListenAndServe(":8080", nil)
-	}
-	
-	
+	tpl = template.Must(template.ParseGlob("templates/*.html"))
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
+
+	http.HandleFunc("/", handler)
+	fmt.Println("Server running at http://localhost:8080")
+	http.ListenAndServe(":8080", nil)
+}
