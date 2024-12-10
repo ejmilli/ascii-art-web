@@ -12,9 +12,9 @@ Handle errors gracefully with custom error pages for 404 and 400 status codes.
 Built with Go's standard library.
 Simple web interface to generate and display ASCII art.
 
-```
-**Project Structure**
 
+**Project Structure**
+```
 ascii-art-generator/
 │
 ├── ascii/ # Go code for generating ASCII art
