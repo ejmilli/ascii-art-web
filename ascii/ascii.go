@@ -11,6 +11,8 @@ func CleanInput(text string) string {
 	return strings.ReplaceAll(text, "\r", "") // Clean \r characters for line endings
 }
 
+
+
 // GenerateASCIIArt generates ASCII art for the given text and template.
 func GenerateASCIIArt(text, template string) (string, int) {
 
@@ -49,6 +51,8 @@ func GenerateASCIIArt(text, template string) (string, int) {
 	return asciiArt, http.StatusOK
 }
 
+
+
 // RenderASCII generates the ASCII art string directly into the result.
 func RenderASCII(asciiMap map[rune][]string, text string) string {
 	var result strings.Builder
@@ -77,6 +81,9 @@ func RenderASCII(asciiMap map[rune][]string, text string) string {
 	}
 	return result.String()
 }
+
+
+
 
 // LoadTemplate loads an ASCII template from a file.
 func LoadTemplate(filePath string) map[rune][]string {
