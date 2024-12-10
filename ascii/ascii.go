@@ -11,8 +11,6 @@ func CleanInput(text string) string {
 	return strings.ReplaceAll(text, "\r", "")
 }
 
-
-
 // GenerateASCIIArt generates ASCII art for the given text and template.
 func GenerateASCIIArt(text, template string) (string, int) {
 
@@ -27,26 +25,28 @@ func GenerateASCIIArt(text, template string) (string, int) {
 	}
 
 	templates := map[string]string{
-		"standard":   "./ascii/txt/standard.txt",
+		"standard":   "./afwiascii/txt/standard.txt",
 		"shadow":     "./ascii/txt/shadow.txt",
 		"thinkertoy": "./ascii/txt/thinkertoy.txt",
 	}
 
 	templatePath := templates[template]
 
-	asciiMap := LoadTemplate(templatePath)
+	asciiMap, err := LoadTemplate(templatePath)
+
+	if err != nil {
+		// Return 500 status code for internal server error
+		return "", http.StatusInternalServerError
+	}
 
 	asciiArt := RenderASCII(asciiMap, text)
 	return asciiArt, 200
 }
 
-
-
 // RenderASCII generates the ASCII art string.
 func RenderASCII(asciiMap map[rune][]string, text string) string {
 	var result strings.Builder
 	lines := strings.Split(text, "\n")
-
 
 	for _, line := range lines {
 		// Prepare an array for each line of ASCII art (8 lines)
@@ -68,14 +68,11 @@ func RenderASCII(asciiMap map[rune][]string, text string) string {
 	return result.String()
 }
 
-
-
-
 // LoadTemplate and other helper functions remain the same
-func LoadTemplate(filePath string) map[rune][]string {
+func LoadTemplate(filePath string) (map[rune][]string, error) {
 	file, err := os.Open(filePath)
 	if err != nil {
-		return nil
+		return nil, err
 	}
 	defer file.Close()
 
@@ -101,7 +98,6 @@ func LoadTemplate(filePath string) map[rune][]string {
 	if len(lines) > 0 {
 		asciiMap[character] = lines
 	}
-	return asciiMap
+	return asciiMap, nil
 
 }
-
