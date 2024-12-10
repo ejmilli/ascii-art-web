@@ -2,7 +2,6 @@ package ascii
 
 import (
 	"bufio"
-	"fmt"
 	"net/http"
 	"os"
 	"strings"
@@ -31,15 +30,9 @@ func GenerateASCIIArt(text, template string) (string, int) {
 		"thinkertoy": "./ascii/txt/thinkertoy.txt",
 	}
 
-	templatePath, exists := templates[template]
-	if !exists {
-		return fmt.Sprintf("Error: Template '%s' not found", template), 400
-	}
+	templatePath := templates[template]
 
 	asciiMap := LoadTemplate(templatePath)
-	if asciiMap == nil {
-		return fmt.Sprintf("Error: Failed to load template '%s'", templatePath), 500
-	}
 
 	asciiArt := RenderASCII(asciiMap, text)
 	return asciiArt, 200
@@ -55,12 +48,7 @@ func RenderASCII(asciiMap map[rune][]string, text string) string {
 		asciiArtLines := make([]string, 8)
 
 		for _, char := range line {
-			asciiLines, exists := asciiMap[char]
-			if !exists {
-				// Log the error only once per character and skip processing
-				result.WriteString(fmt.Sprintf("Error: '%c' not found\n", char))
-				continue
-			}
+			asciiLines := asciiMap[char]
 			// Append ASCII lines for this character to the corresponding line in the result
 			for i := 0; i < 8; i++ {
 				asciiArtLines[i] += asciiLines[i]
