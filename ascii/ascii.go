@@ -8,7 +8,7 @@ import (
 )
 
 func CleanInput(text string) string {
-	return strings.ReplaceAll(text, "\r", "") // Clean \r characters for line endings
+	return strings.ReplaceAll(text, "\r", "")
 }
 
 
@@ -17,7 +17,6 @@ func CleanInput(text string) string {
 func GenerateASCIIArt(text, template string) (string, int) {
 
 	text = CleanInput(text)
-
 	// Validate input for unprintable ASCII characters
 	for _, char := range text {
 		if char < 32 || char > 126 {
@@ -27,47 +26,33 @@ func GenerateASCIIArt(text, template string) (string, int) {
 		}
 	}
 
-	// Template paths map
 	templates := map[string]string{
 		"standard":   "./ascii/txt/standard.txt",
 		"shadow":     "./ascii/txt/shadow.txt",
 		"thinkertoy": "./ascii/txt/thinkertoy.txt",
 	}
 
-	// Check if template exists
-	templatePath, exists := templates[template]
-	if !exists {
-		return "", http.StatusBadRequest
-	}
+	templatePath := templates[template]
 
-	// Load the ASCII map
 	asciiMap := LoadTemplate(templatePath)
-	if asciiMap == nil {
-		return "", http.StatusInternalServerError
-	}
 
-	// Render ASCII Art
 	asciiArt := RenderASCII(asciiMap, text)
-	return asciiArt, http.StatusOK
+	return asciiArt, 200
 }
 
 
 
-// RenderASCII generates the ASCII art string directly into the result.
+// RenderASCII generates the ASCII art string.
 func RenderASCII(asciiMap map[rune][]string, text string) string {
 	var result strings.Builder
-	lines := strings.Split(text, "\n") // Split input text into lines
+	lines := SplitTextByLines(ParseEscapeSequences(text))
 
 	for _, line := range lines {
 		// Prepare an array for each line of ASCII art (8 lines)
 		asciiArtLines := make([]string, 8)
 
 		for _, char := range line {
-			asciiLines, exists := asciiMap[char]
-			if !exists {
-				continue // Skip if character is not found in the template
-			}
-
+			asciiLines := asciiMap[char]
 			// Append ASCII lines for this character to the corresponding line in the result
 			for i := 0; i < 8; i++ {
 				asciiArtLines[i] += asciiLines[i]
@@ -85,7 +70,7 @@ func RenderASCII(asciiMap map[rune][]string, text string) string {
 
 
 
-// LoadTemplate loads an ASCII template from a file.
+// LoadTemplate and other helper functions remain the same
 func LoadTemplate(filePath string) map[rune][]string {
 	file, err := os.Open(filePath)
 	if err != nil {
@@ -109,6 +94,16 @@ func LoadTemplate(filePath string) map[rune][]string {
 		} else {
 			lines = append(lines, line)
 		}
+
 	}
 	return asciiMap
+
+}
+
+func ParseEscapeSequences(input string) string {
+	return strings.ReplaceAll(input, `\n`, "\n")
+}
+
+func SplitTextByLines(text string) []string {
+	return strings.Split(text, "\n")
 }
