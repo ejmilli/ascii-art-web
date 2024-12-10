@@ -71,8 +71,6 @@ The project includes custom error pages for various HTTP status codes:
 These HTML error pages are located in the templates/ directory and are used for respective HTTP error statuses.
 ```
 
-```
 
 
 ![alt text](flowchart.png)
-```
