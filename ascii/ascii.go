@@ -45,7 +45,8 @@ func GenerateASCIIArt(text, template string) (string, int) {
 // RenderASCII generates the ASCII art string.
 func RenderASCII(asciiMap map[rune][]string, text string) string {
 	var result strings.Builder
-	lines := SplitTextByLines(ParseEscapeSequences(text))
+	lines := strings.Split(text, "\n")
+
 
 	for _, line := range lines {
 		// Prepare an array for each line of ASCII art (8 lines)
@@ -96,14 +97,11 @@ func LoadTemplate(filePath string) map[rune][]string {
 		}
 
 	}
+
+	if len(lines) > 0 {
+		asciiMap[character] = lines
+	}
 	return asciiMap
 
 }
 
-func ParseEscapeSequences(input string) string {
-	return strings.ReplaceAll(input, `\n`, "\n")
-}
-
-func SplitTextByLines(text string) []string {
-	return strings.Split(text, "\n")
-}
