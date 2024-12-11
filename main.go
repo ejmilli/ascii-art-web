@@ -9,7 +9,6 @@ import (
 
 type TemplateData struct {
 	ASCIIART string
-	Error    string
 }
 
 var tpl *template.Template
