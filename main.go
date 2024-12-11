@@ -69,11 +69,8 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			renderError(w, http.StatusInternalServerError, "500.html")
 		}
-
-	default:
-		// Handle invalid HTTP methods
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
+	
 }
 
 func main() {
