@@ -46,24 +46,19 @@ func GenerateASCIIArt(text, template string) (string, int) {
 // RenderASCII generates the ASCII art string.
 func RenderASCII(asciiMap map[rune][]string, text string) string {
 	var result strings.Builder
-	lines := strings.Split(text, "\n")
+	asciiArtLines := make([]string, 8) // Prepare a common array for the entire text's ASCII art
 
-	for _, line := range lines {
-		// Prepare an array for each line of ASCII art (8 lines)
-		asciiArtLines := make([]string, 8)
-
-		for _, char := range line {
+	for _, char := range text {
 			asciiLines := asciiMap[char]
 			// Append ASCII lines for this character to the corresponding line in the result
 			for i := 0; i < 8; i++ {
-				asciiArtLines[i] += asciiLines[i]
+					asciiArtLines[i] += asciiLines[i]
 			}
-		}
+	}
 
-		// Add the complete ASCII lines for the current input line
-		for _, asciiLine := range asciiArtLines {
+	// Add the complete ASCII lines for the entire text
+	for _, asciiLine := range asciiArtLines {
 			result.WriteString(asciiLine + "\n")
-		}
 	}
 	return result.String()
 }
