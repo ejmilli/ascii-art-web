@@ -78,7 +78,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 
-	tpl = template.Must(template.ParseGlob("templates/*.html"))
+	tpl = template.Must(template.ParseGlob("template/*.html"))
 
 	http.HandleFunc("/", handler)
 	fmt.Println("Server running at http://localhost:8080")
