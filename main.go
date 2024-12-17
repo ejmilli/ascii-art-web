@@ -80,7 +80,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 func main() {
 
 	tpl = template.Must(template.ParseGlob("templates/*.html"))
-
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 	http.HandleFunc("/", handler)
 	fmt.Println("Server running at http://localhost:8080")
 	http.ListenAndServe(":8080", nil)

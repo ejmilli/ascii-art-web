@@ -40,7 +40,7 @@ func GenerateASCIIArt(text, template string) (string, int) {
 	}
 
 	asciiArt := RenderASCII(asciiMap, text)
-	return asciiArt, 200
+	return asciiArt, http.StatusOK
 }
 
 // RenderASCII generates the ASCII art string.

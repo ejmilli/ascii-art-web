@@ -1,0 +1,143 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #fff9ec;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+h1 {
+  color: #856e5c;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700; /* Corrected font weight */
+  font-size: 5.25vw;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+h2 {
+  color: #333030;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 550;
+  font-size: 20px;
+  text-align: left;
+}
+
+form {
+  background: #FFFFFF;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 90vw;
+  margin: auto;
+}
+
+textarea {
+  width: 100%;
+  min-height: 200px; /* Increased height for better usability */
+  border: 1px solid #CCC;
+  border-radius: 5px;
+  padding: 10px;
+  font-family: 'Courier New', monospace;
+  resize: none;
+}
+
+button {
+  background-color: #FFD700;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 550;
+  color: #333030;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 5px;
+  font-size: 20px;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+button:hover {
+  background-color: #FFC107;
+}
+
+button:focus {
+  outline: 3px solid #00ADB5; /* Added focus for better accessibility */
+}
+
+pre {
+  background: #EAEAEA;
+  padding: 10px;
+  border-radius: 5px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  color: #333;
+  width: 100%;
+  max-width: 100%;
+  min-height: 100px;
+  max-height: 400px; 
+  overflow-y: auto;
+  box-sizing: border-box;
+  word-wrap: break-word;
+}
+
+.container {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 6vw;
+  }
+  form {
+    padding: 15px;
+    max-width: 95vw;
+  }
+  textarea {
+    min-height: 120px;
+  }
+  button {
+    width: 100%;
+  }
+
+  pre {
+    font-size: 0.8rem;
+    padding: 8px;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 7vw;
+  }
+  form {
+    padding: 10px;
+  }
+  textarea {
+    min-height: 100px;
+  }
+  button {
+    width: 100%;
+    padding: 12px;
+  }
+  pre {
+    font-size: 0.7rem;
+    padding: 6px;
+  }
+}
