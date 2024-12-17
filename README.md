@@ -12,8 +12,8 @@ Handle errors gracefully with custom error pages for 404 and 400 status codes.
 Built with Go's standard library.
 Simple web interface to generate and display ASCII art.
 
-
 **Project Structure**
+
 ```
 ascii-art-generator/
 │
@@ -71,6 +71,8 @@ The project includes custom error pages for various HTTP status codes:
 These HTML error pages are located in the templates/ directory and are used for respective HTTP error statuses.
 ```
 
+```
 
 
 ![alt text](flowchart.png)
+```

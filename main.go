@@ -9,7 +9,6 @@ import (
 
 type TemplateData struct {
 	ASCIIART string
-	Error    string
 }
 
 var tpl *template.Template
@@ -70,17 +69,19 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			renderError(w, http.StatusInternalServerError, "500.html")
 		}
-
-	default:
-		// Handle invalid HTTP methods
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
+	
 }
 
 func main() {
 
+<<<<<<< HEAD
 	tpl = template.Must(template.ParseGlob("templates/*.html"))
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+=======
+	tpl = template.Must(template.ParseGlob("template/*.html"))
+
+>>>>>>> 6bd48e8f3f41e523c857c107c0007b54ebbda5f9
 	http.HandleFunc("/", handler)
 	fmt.Println("Server running at http://localhost:8080")
 	http.ListenAndServe(":8080", nil)
